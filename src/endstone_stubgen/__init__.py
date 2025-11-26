@@ -1,10 +1,12 @@
 import argparse
+import importlib
 from pathlib import Path
 
-__all__ = ["main"]
+__all__ = ["load", "render"]
 
 import griffe
 import jinja2
+from griffe import Inspector, ObjectNode
 
 from .extensions import (
     MemberOrderFix,
@@ -65,7 +67,7 @@ def render(mod: griffe.Module, output_dir: Path):
 
 
 def load(module_name: str) -> griffe.Module:
-    ext = griffe.load_extensions(
+    extensions = griffe.load_extensions(
         Pybind11SubmoduleSupport,
         Pybind11InternalsFilter,
         Pybind11PropertySupport,
@@ -75,12 +77,11 @@ def load(module_name: str) -> griffe.Module:
         Pybind11ImportFix,
         MemberOrderFix,
     )
-
-    module = griffe.load(module_name, extensions=ext)
-    if not isinstance(module, griffe.Module):
-        raise ValueError(f"Module {module_name} is not a valid module")
-
-    return module
+    module = importlib.import_module(module_name)
+    module_node = ObjectNode(module, module_name, parent=None)
+    inspector = Inspector(module_name, None, extensions)
+    inspector.inspect(module_node)
+    return inspector.current.module
 
 
 def run(module_name: str, output_dir: Path, dry_run: bool = False):
