@@ -51,8 +51,8 @@ def render(mod: griffe.Module, output_dir: Path):
         result = template.render(obj=mod)
         parts = mod.path.split(".")
         pkg_dir = output_dir / Path(*parts)
-        pkg_dir.mkdir(parents=True, exist_ok=True)
-        (pkg_dir / "__init__.pyi").write_text(result, encoding="utf-8")
+        pkg_dir.parent.mkdir(parents=True, exist_ok=True)
+        (pkg_dir.with_suffix('.pyi')).write_text(result, encoding="utf-8")
         for child in mod.modules.values():
             if child.is_alias:
                 continue
