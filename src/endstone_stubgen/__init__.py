@@ -1,12 +1,8 @@
 import argparse
-import importlib
 from pathlib import Path
-
-__all__ = ["load", "render"]
 
 import griffe
 import jinja2
-from griffe import Inspector, ObjectNode
 
 from .extensions import (
     MemberOrderFix,
@@ -18,6 +14,8 @@ from .extensions import (
     Pybind11PropertySupport,
     Pybind11SubmoduleSupport,
 )
+
+__all__ = ["load", "render"]
 
 
 def main():
@@ -52,7 +50,7 @@ def render(mod: griffe.Module, output_dir: Path):
         parts = mod.path.split(".")
         pkg_dir = output_dir / Path(*parts)
         pkg_dir.parent.mkdir(parents=True, exist_ok=True)
-        (pkg_dir.with_suffix('.pyi')).write_text(result, encoding="utf-8")
+        (pkg_dir.with_suffix(".pyi")).write_text(result, encoding="utf-8")
         for child in mod.modules.values():
             if child.is_alias:
                 continue
