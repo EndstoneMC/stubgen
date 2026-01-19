@@ -8,10 +8,34 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = ["jinja2", "griffe"]
+license = "MIT"
+keywords = ["stubs", "pybind11", "type-hints", "pyi", "stub-generator", "griffe"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Typing :: Typed",
+]
+
+[project.scripts]
+stubgen = "endstone_stubgen:main"
+
+[project.urls]
+Homepage = "https://github.com/EndstoneMC/stubgen"
+Repository = "https://github.com/EndstoneMC/stubgen"
+Issues = "https://github.com/EndstoneMC/stubgen/issues"
 
 [build-system]
 requires = ["uv_build>=0.8.17,<0.9.0"]
 build-backend = "uv_build"
+
+[tool.uv_build]
+package-data = { "endstone_stubgen" = ["templates/*.jinja"] }
 
 [tool.ruff]
 line-length = 120
