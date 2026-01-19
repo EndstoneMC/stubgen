@@ -77,11 +77,16 @@ def load(module_name: str) -> griffe.Module:
         Pybind11ImportFix,
         MemberOrderFix,
     )
-    module = importlib.import_module(module_name)
-    module_node = ObjectNode(module, module_name, parent=None)
-    inspector = Inspector(module_name, None, extensions)
-    inspector.inspect(module_node)
-    return inspector.current.module
+    module = griffe.load(module_name, extensions=extensions)
+    if not isinstance(module, griffe.Module):
+        raise ValueError(f"Module {module_name} is not a valid module")
+    return module
+    # TODO: use importlib for better importing logics
+    # module = importlib.import_module(module_name)
+    # module_node = ObjectNode(module, module_name, parent=None)
+    # inspector = Inspector(module_name, None, extensions)
+    # inspector.inspect(module_node)
+    # return inspector.current.module
 
 
 def run(module_name: str, output_dir: Path, dry_run: bool = False):
