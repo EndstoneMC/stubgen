@@ -1,6 +1,6 @@
 [project]
 name = "endstone-stubgen"
-version = "0.1.0"
+version = "0.1.1"
 description = "The next-generation stub generator for pybind11 modules, built with Griffe and Jinja2"
 readme = "README.md"
 authors = [
