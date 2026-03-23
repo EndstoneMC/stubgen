@@ -22,6 +22,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 
+[dependency-groups]
+dev = ["ruff"]
+
 [project.scripts]
 stubgen = "endstone_stubgen:main"
 

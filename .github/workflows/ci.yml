@@ -24,10 +24,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install
-        run: uv sync
+        run: uv sync --group dev
 
       - name: Lint
-        run: uv run ruff check src/
+        run: uv run --with ruff ruff check src/
 
       - name: Build
         run: uv build
