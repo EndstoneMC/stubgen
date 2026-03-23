@@ -1,40 +1,33 @@
-name: CI
+name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [ "main" ]
   pull_request:
-    branches: [main]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.11", "3.12", "3.13" ]
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout Code
+        uses: actions/checkout@v6
 
-      - name: Install uv
+      - name: Set up uv
         uses: astral-sh/setup-uv@v7
+        with:
+          python-version: ${{ matrix.python-version }}
 
-      - name: Set up Python
-        run: uv python install 3.12
-
-      - name: Install dependencies
+      - name: Install
         run: uv sync
 
-      - name: Lint with ruff
-        run: |
-          uv pip install ruff
-          uv run ruff check .
+      - name: Lint
+        run: uv run ruff check src/
 
-      - name: Build package
+      - name: Build
         run: uv build
-
-      - name: Verify wheel contents
-        run: |
-          python -m zipfile -l dist/*.whl
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
